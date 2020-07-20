@@ -2,10 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ParkingLotComponent } from './parking-lot.component';
 import { ParkingLotOwner } from './ParkingLotOwner';
-
+import { ParkingAttendant} from './ParkingAttendant';
 describe('ParkingLotComponent', () => {
   let component: ParkingLotComponent;
-  //let Owner : ParkingLotOwner;
+  let parkingAttendent: ParkingAttendant;
   let fixture: ComponentFixture<ParkingLotComponent>;
   let parking;
   let car;
@@ -115,8 +115,8 @@ describe('ParkingLotComponent', () => {
   //Test Case To Check Parking Lot Spaces 
   it(`given car object when parking lot is not full then show spaces available`, () => {
     try {
-      this.component.isParked(this.car8, function(result) {
-        this.component.isParked(this.car9, function(result) {
+      this.component.isParked(this.car8, function (result) {
+        this.component.isParked(this.car9, function (result) {
           let unparkResult = this.component.isUnparked(this.car9);
           expect(unparkResult).toEqual(true);
         });
@@ -125,5 +125,19 @@ describe('ParkingLotComponent', () => {
       console.log(e.message);
     }
   });
+  // Test Case To Take Decisions Where To Park Cars
+  it(`given car object when parking lot has space, attendent will park car`, () => {
+    try {
+      parkingAttendent.checkVacentSlot(function(result) {
+        let position = result;
+        this.component.addAtSpecific(position, this.car10, function(result) {
+          expect(result).toEqual(true);
+        });
+      });
+    } catch (e) {
+      console.log(e.message);
+    }
+  });
+
 });
 
