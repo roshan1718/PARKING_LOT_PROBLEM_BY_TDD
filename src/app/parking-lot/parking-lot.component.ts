@@ -7,32 +7,43 @@ import { ParkingLotOwner} from './ParkingLotOwner';
 })
 export class ParkingLotComponent implements OnInit {
   parking: any[];
+  vehicle ;
+  color;
   parkingCapacity = 20;
-  constructor( public parkingOwner: ParkingLotOwner) {
-  }
-  ngOnInit(): void {
-  }
+  noOfVehicles = 1;
 
-  isParked = (parking, vehicle, callback) => {
+  constructor( public parkingOwner: ParkingLotOwner) {
+    this.parking = [[this.vehicle, this.color]];
+  }
+  ngOnInit(): void {}
+
+  isParked = (vehicle, callback) => {
     if ( vehicle == null || vehicle === undefined){
-        throw new Error("Couldn't Park..Invalid Vehicle..")
+        throw new Error('Couldn\'t Park..Invalid Vehicle..');
     }
     else {
         // If Parking is not full then it will add vehicle
-        this.parkingOwner.checkParkingFull(parking, function(result){
-        if (result === true){
-            parking.push(vehicle);
-            callback(result);
+        if (this.parkingOwner.checkParkingFull(this.noOfVehicles, this.parkingCapacity)){
+          this.parking[this.noOfVehicles] = vehicle;
+          this.noOfVehicles++;
+          callback(true);
         }
-        });
     }
 }
-  //Method To Remove Vehicle To Parking
+  // Method To Remove Vehicle To Parking
   isUnparked(vehicle) {
       if ( vehicle == null || vehicle === undefined){
-          throw new Error("Couldn't Unpark Car..Invalid Vehicle..");
-      }else {
-        return true;
-      }
+          throw new Error('Couldn\'t Unpark Car..Invalid Vehicle..');
+      } else{
+        for (let index = 0; index < this.parkingCapacity; index++)
+        {
+            if (this.parking[index] === vehicle )
+            {
+                delete this.parking[index];
+                this.parkingOwner.checkSpaceAvailable(index);
+                return true;
+            }
+        }
+    }
   }
 }
