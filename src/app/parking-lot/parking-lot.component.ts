@@ -19,7 +19,7 @@ export class ParkingLotComponent implements OnInit {
 
   isParked = (vehicle, callback) => {
     if (vehicle == null || vehicle === undefined) {
-      throw new Error('Couldn\'t Park..Invalid Vehicle..');
+      throw new Error('Could not Park..Invalid Vehicle..');
     }
     else {
       // If Parking is not full then it will add vehicle
@@ -48,10 +48,10 @@ export class ParkingLotComponent implements OnInit {
   // Method TO Check Empty Slot
   emptySlots() {
     for (let index = 0; index < this.parkingCapacity; index++) {
-      if (this.parking[index] === ','){
+      if (this.parking[index] === ',') {
         return index;
       }
-      else{
+      else {
         throw new Error("No Slot is Empty");
       }
     }
@@ -60,6 +60,17 @@ export class ParkingLotComponent implements OnInit {
   addAtSpecific(index, vehicle, callback) {
     this.parking[index] = vehicle;
     callback(true);
+  }
+  // Method For Finding Vehicle In Parking Lot
+  findVehicle(vehicle) {
+    for (var index = 1; index <= this.parking.length; index++){
+      if (this.parking[index] === vehicle){
+        return index;
+      }
+      else{
+        throw new Error("This vehicle isn't park here, check credentials again");
+      }
+    }
   }
 
 }
