@@ -32,7 +32,7 @@ describe('ParkingLotComponent', () => {
 
   // Test For Add Vehicle in Parking Lot
   it(`given car object when car is parked should return true`, () => {
-    car1 = { vehicleNumber: "MH.15.XX.0000", color: "White" };
+    car1 = { vehicleNumber: "MH.15.XX.0000", color: "White", parkTime: Date()};
     try {
       component.isParked(this.car1, function (result) {
         expect(result).toEqual(false);
@@ -56,7 +56,7 @@ describe('ParkingLotComponent', () => {
 
   // Test For Unpark Car from parking Lot
   it(`given car object when car is unpark then return true`, () => {
-    car2 = { vehicleNumber: "MH.15.XX.1111", color: "Yello" };
+    car2 = { vehicleNumber: "MH.15.XX.1111", color: "Yello", parkTime: Date() };
     try {
       this.component.isParked(this.car2, function (result) {
         const carParkedOrNot = this.component.isUnparked(this.car2);
@@ -69,7 +69,7 @@ describe('ParkingLotComponent', () => {
 
   // Test For Possiblities To Remove Vehicle from Parking Lot
   it(`given car object when invalid or car can't unparked should return exception`, () => {
-    car3 = { vehicleNumber: "MH.15.XX.2222", color: "Cyan" };
+    car3 = { vehicleNumber: "MH.15.XX.2222", color: "Cyan", parkTime: Date() };
     try {
       this.component.isParked(this.car3, function (result) {
         const carParkedOrNot = this.component.isUnparked(undefined);
@@ -81,11 +81,11 @@ describe('ParkingLotComponent', () => {
   });
   //Test For Check The Parking Lot Is Full
   it(`given car object when park if parking full should return parking full`, () => {
-    car4 = { vehicleNumber: "MH.15.XX.3333", color: "Black" };
-    car5 = { vehicleNumber: "MH.15.XX.4444", color: "Red" };
+    car4 = { vehicleNumber: "MH.15.XX.3333", color: "Black", parkTime: Date()};
+    car5 = { vehicleNumber: "MH.15.XX.4444", color: "Red", parkTime: Date()};
     try {
-      this.component.isParked(this.car4, function (result) {
-        this.component.isParked(this.car5, function (result) {
+      this.component.isParked(this.car4, function(result) {
+        this.component.isParked(this.car5, function(result) {
           expect(result).toEqual(true);
         });
       });
@@ -96,11 +96,11 @@ describe('ParkingLotComponent', () => {
 
   //Test For Checking If Parking Is Full and notify Airport Security
   it(`given car object when parking is full then notify airport security return exception`, () => {
-    car6 = { vehicleNumber: "MH.15.YY.5555", color: "Orange" };
-    car7 = { vehicleNumber: "MH.15.YY.6666", color: "Green" };
+    car6 = { vehicleNumber: "MH.15.YY.5555", color: "Orange", parkTime: Date()};
+    car7 = { vehicleNumber: "MH.15.YY.6666", color: "Green", parkTime: Date()};
     try {
-      this.component.isParked(this.car6, function (result) {
-        this.component.isParked(this.car7, function (result) {
+      this.component.isParked(this.car6, function(result) {
+        this.component.isParked(this.car7, function(result) {
           expect(result).toEqual(true);
         });
       });
@@ -110,8 +110,8 @@ describe('ParkingLotComponent', () => {
   });
   //Test Case To Check Parking Lot Spaces 
   it(`given car object when parking lot is not full then show spaces available`, () => {
-    car8 = { vehicleNumber: "MH.15.YY.7777", color: "Blue" };
-    car9 = { vehicleNumber: "MH.15.ZZ.8888", color: "Indigo" };
+    car8 = { vehicleNumber: "MH.15.YY.7777", color: "Blue", parkTime: Date()};
+    car9 = { vehicleNumber: "MH.15.ZZ.8888", color: "Indigo", parkTime: Date() };
     try {
       this.component.isParked(this.car8, function (result) {
         this.component.isParked(this.car9, function (result) {
@@ -125,7 +125,7 @@ describe('ParkingLotComponent', () => {
   });
   // Test Case To Take Decisions Where To Park Cars
   it(`given car object when parking lot has space, attendent will park car`, () => {
-    car10 = { vehicleNumber: "MH.15.ZZ.9999", color: "Gray" };
+    car10 = { vehicleNumber: "MH.15.ZZ.9999", color: "Gray", parkTime: Date()};
     try {
       parkingAttendent.checkVacentSlot(function (result) {
         let position = result;
@@ -147,6 +147,19 @@ describe('ParkingLotComponent', () => {
       console.log(e.message);
     }
   });
+  // When Car Parked In Lot Owner Want To Get Details of that vehicle
+  it(`given car object if park show parking details of that vehicle`, () => {
+    try {
+      if (this.component.findVehicle(car5.vehicleNumber)) {
+        console.log("Details : Number : " + car5.vehicleNumber);
+        console.log(" Color : " + car5.color);
+        console.log(" Time of Parking : " + car5.parkTime);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  });
 
 });
+
 
