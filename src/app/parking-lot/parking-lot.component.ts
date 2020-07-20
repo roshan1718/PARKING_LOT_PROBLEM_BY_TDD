@@ -15,13 +15,24 @@ export class ParkingLotComponent implements OnInit {
   }
 
   isParked(vehicle) {
-    if (vehicle == null || vehicle === undefined){
+    if (vehicle == null || vehicle === undefined) {
       throw new Error('Could not Park..Invalid Vehicle..');
     }
     else {
       this.parking.push(vehicle);
       return true;
     }
+  }
+  //Method To Remove Vehicle To Parking
+  isUnparked(vehicle) {
+    if (vehicle == null || vehicle === undefined){
+      throw new Error('Could not Unpark Car..Invalid Vehicle..');
+    }
+    else
+      if (this.parking.includes(vehicle)) {
+        this.parking.pop();
+        return true;
+      }
   }
 
 }
