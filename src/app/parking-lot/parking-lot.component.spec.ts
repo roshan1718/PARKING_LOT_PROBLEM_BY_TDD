@@ -86,4 +86,21 @@ describe('ParkingLotComponent', () => {
     }
   });
 
+  //Test For Checking If Parking Is Full and notify Airport Security
+  it(`given car object when parking is full then notify airport security return exception`,() =>
+  {
+      try{
+          component.isParked(parking, car, function(result){
+              component.isParked(parking, car, function(result){
+                  component.isParked(parking, car, function(result){
+                      expect(result).toEqual(true);
+                  });
+              });
+          });
+      }catch (e){
+          console.log(e.message);
+      }
+  });
+
+
 });

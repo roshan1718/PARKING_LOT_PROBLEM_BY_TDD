@@ -7,6 +7,7 @@ import { ParkingLotOwner} from './ParkingLotOwner';
 })
 export class ParkingLotComponent implements OnInit {
   parking: any[];
+  parkingCapacity = 20;
   constructor( public parkingOwner: ParkingLotOwner) {
   }
   ngOnInit(): void {
