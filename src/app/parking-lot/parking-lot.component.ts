@@ -8,14 +8,15 @@ import { ParkingLotOwner } from './ParkingLotOwner';
 export class ParkingLotComponent implements OnInit {
   parking: any[];
   vehicle;
-  color;
   parkingCapacity = 20;
   noOfVehicles = 1;
+  index = [];
 
   constructor(public parkingOwner: ParkingLotOwner) {
-    this.parking = [[this.vehicle, this.color]];
+    this.parking = [[], [], [], []];
   }
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   isParked = (vehicle, callback) => {
     if (vehicle == null || vehicle === undefined) {
@@ -24,53 +25,75 @@ export class ParkingLotComponent implements OnInit {
     else {
       // If Parking is not full then it will add vehicle
       if (this.parkingOwner.checkParkingFull(this.noOfVehicles, this.parkingCapacity)) {
-        this.parking[this.noOfVehicles] = vehicle;
-        this.noOfVehicles++;
-        callback(true);
+          if (vehicle.driverType === 'Handicap') {
+            this.index = this.findNearestSlot(undefined);
+          }else
+            this.index = this.checkForParkingSlot(undefined);
+          this.parking[this.index[0]][this.index[1]] = vehicle;
+          this.noOfVehicles++;
+          callback(true);
       }
     }
   }
   // Method To Remove Vehicle To Parking
   isUnparked(vehicle) {
     if (vehicle == null || vehicle === undefined) {
-      throw new Error('Couldn\'t Unpark Car..Invalid Vehicle..');
+      throw new Error('Could not Unpark Car..Invalid Vehicle..');
     } else {
-      for (let index = 0; index < this.parkingCapacity; index++) {
-        if (this.parking[index] === vehicle) {
-          delete this.parking[index];
-          this.parkingOwner.checkSpaceAvailable(index);
-          return true;
-        }
-      }
+      this.index = this.checkForParkingSlot(vehicle);
+      delete this.parking[this.index[0]][this.index[1]];
+      this.noOfVehicles--;
+      this.parkingOwner.checkSpaceAvailable(vehicle);
+      return true;
     }
   }
 
+
   // Method TO Check Empty Slot
   emptySlots() {
-    for (let index = 0; index < this.parkingCapacity; index++) {
-      if (this.parking[index] === ',') {
-        return index;
-      }
-      else {
-        throw new Error("No Slot is Empty");
-      }
-    }
+    this.index = this.checkForParkingSlot(undefined);
+    return this.index;
   }
   // Method To Add Vehicle At Specific Slot
+
   addAtSpecific(index, vehicle, callback) {
-    this.parking[index] = vehicle;
+    this.parking[index[0]][index[1]] = vehicle;
+    this.noOfVehicles++;
     callback(true);
   }
   // Method For Finding Vehicle In Parking Lot
   findVehicle(vehicle) {
-    for (var index = 1; index <= this.parking.length; index++){
-      if (this.parking[index] === vehicle){
-        return index;
+    this.index = this.checkForParkingSlot(vehicle);
+    if (this.parking[this.index[0]][this.index[1]] == vehicle)
+    return true;
+          else
+              throw new Error("This vehicle is not park here, check credentials again");
       }
-      else{
-        throw new Error("This vehicle isn't park here, check credentials again");
+//Method To Check Nearest Slot in Parking
+findNearestSlot(vehicle)
+{
+  for (let rowIndex = 0; rowIndex < (this.parkingCapacity / 2); rowIndex++) {
+    for (let columnIndex = 0; columnIndex < this.parkingCapacity; columnIndex++) {
+      if (this.parking[rowIndex][columnIndex] === this.vehicle) {
+        var arr = [rowIndex, columnIndex];
+        return arr;
       }
     }
   }
+  this.checkForParkingSlot(this.vehicle);
+  throw new Error("Couldn't Find Nearest Slot Adding At Available Slot")
+}
+// Method To Check Availability of Input Vehicle
+checkForParkingSlot(vehicle){
+  for (let rowIndex = 0; rowIndex < this.parking.length; rowIndex++) {
+    for (let columnIndex = 0; columnIndex < this.parking.length; columnIndex++) {
+      if (this.parking[rowIndex][columnIndex] === this.vehicle) {
+        var arr = [rowIndex, columnIndex];
+        return arr;
+      }
+    }
+  }
+  throw new Error("Couldn't Add, Remove or Found Specific Vehicle")
+}
 
 }
